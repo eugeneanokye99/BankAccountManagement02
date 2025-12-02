@@ -72,4 +72,6 @@ public class CheckingAccount extends Account {
         return "Checking";
     }
 
+    public void applyMonthlyFee() {
+    }
 }

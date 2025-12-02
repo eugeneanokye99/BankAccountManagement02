@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.util.Scanner;
 import customer.Customer;
 import customer.RegularCustomer;
@@ -41,7 +42,9 @@ public class Main {
                     case 3: customerUI.viewCustomersMenu(); break;
                     case 4: processTransaction(); break;
                     case 5: viewTransactionHistory(); break;
-                    case 6: exitApplication(); break;
+                    case 6: generateAccountStatement(); break;
+                    case 7: runTest(); break;
+                    case 8: exitApplication(); break;
                     default: CustomUtils.printError("Invalid choice! Please enter 1-6.");
                 }
             } catch (Exception e) {
@@ -50,14 +53,64 @@ public class Main {
                 choice = 0;
             }
 
-            if (choice != 6) {
+            if (choice != 8) {
                 CustomUtils.printInline("\nPress Enter to continue...");
                 scanner.nextLine();
             }
 
-        } while (choice != 6);
+        } while (choice != 8);
 
         scanner.close();
+    }
+
+    private static void runTest() {
+    }
+
+    private static void generateAccountStatement() {
+        CustomUtils.printSection("GENERATE ACCOUNT STATEMENT");
+
+        CustomUtils.printInline("Enter Account Number: ");
+        String accountNumber = scanner.nextLine();
+
+        Account account = accountManager.findAccount(accountNumber);
+        if (account == null) {
+            CustomUtils.printError("Account not found!");
+            return;
+        }
+
+        CustomUtils.print("\n" + "=".repeat(60));
+        CustomUtils.print("ACCOUNT STATEMENT");
+        CustomUtils.print("=".repeat(60));
+
+        // Account Information
+        CustomUtils.print("\nACCOUNT INFORMATION:");
+        CustomUtils.print("Account Number: " + account.getAccountNumber());
+        CustomUtils.print("Account Type: " + account.getAccountType());
+        CustomUtils.print("Customer: " + account.getCustomer().getName());
+        CustomUtils.print("Customer ID: " + account.getCustomer().getCustomerId());
+        CustomUtils.print("Status: " + account.getStatus());
+        CustomUtils.print("Current Balance: $" + String.format("%.2f", account.getBalance()));
+
+        // Account-specific details
+        if (account instanceof SavingsAccount) {
+            SavingsAccount savings = (SavingsAccount) account;
+            CustomUtils.print("Interest Rate: " + savings.getInterestRate() + "%");
+            CustomUtils.print("Minimum Balance: $" + String.format("%.2f", savings.getMinimumBalance()));
+            CustomUtils.print("Interest Earned: $" + String.format("%.2f", savings.calculateInterest()));
+        } else if (account instanceof CheckingAccount) {
+            CheckingAccount checking = (CheckingAccount) account;
+            CustomUtils.print("Overdraft Limit: $" + String.format("%.2f", checking.getOverdraftLimit()));
+            CustomUtils.print("Monthly Fee: $" + String.format("%.2f", checking.getMonthlyFee()));
+            if (account.getCustomer().getCustomerType().equals("Premium")) {
+                CustomUtils.print("Monthly Fee Status: WAIVED");
+            }
+        }
+
+        CustomUtils.print("\n" + "=".repeat(60));
+        CustomUtils.print("Statement Date: " + LocalDate.now());
+        CustomUtils.print("=".repeat(60));
+
+        CustomUtils.printSuccess("Account statement generated successfully!");
     }
 
     private static void displayMainMenu() {
@@ -67,7 +120,9 @@ public class Main {
         CustomUtils.print("3. View Customers");
         CustomUtils.print("4. Process Transaction");
         CustomUtils.print("5. View Transaction History");
-        CustomUtils.print("6. Exit");
+        CustomUtils.print("6. Generate Account Statements");
+        CustomUtils.print("7. Run Tests");
+        CustomUtils.print("8. Exit");
         CustomUtils.print();
     }
 

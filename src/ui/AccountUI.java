@@ -4,13 +4,18 @@ import account.Account;
 import account.AccountManager;
 import java.util.Scanner;
 
+import  ui.AccountManagerUI;
+import utils.CustomUtils;
+
 public class AccountUI {
     private AccountManager accountManager;
     private Scanner scanner;
+    private AccountManagerUI accountManagerUI ;
 
     public AccountUI(AccountManager accountManager, Scanner scanner) {
         this.accountManager = accountManager;
         this.scanner = scanner;
+        this.accountManagerUI = new AccountManagerUI(accountManager, scanner);
     }
 
     // Main entry point for account viewing
@@ -29,38 +34,40 @@ public class AccountUI {
                     case 1: viewAllAccounts(); break;
                     case 2: viewAccountDetails(); break;
                     case 3: searchAccount(); break;
-                    case 4: return; // Go back to main menu
-                    default: System.out.println("Invalid choice! Please enter 1-4.");
+                    case 4: accountManagerUI.manageAccounts(); break;
+                    case 5: return; // Go back to main menu
+                    default: CustomUtils.print("Invalid choice! Please enter 1-5.");
                 }
 
-                if (accountChoice != 4) {
+                if (accountChoice != 5) {
                     System.out.print("\nPress Enter to continue...");
                     scanner.nextLine();
                 }
 
             } catch (Exception e) {
-                System.out.println("Invalid input! Please enter a number.");
+                CustomUtils.print("Invalid input! Please enter a number.");
                 scanner.nextLine();
                 accountChoice = 0;
             }
 
-        } while (accountChoice != 4);
+        } while (accountChoice != 5);
     }
 
     private void displayAccountMenu() {
         int width = 50;
-        System.out.println();
-        System.out.print("┌"); for (int i = 0; i < width; i++) System.out.print("─"); System.out.println("┐");
+        CustomUtils.print();
+        System.out.print("┌"); for (int i = 0; i < width; i++) System.out.print("─"); CustomUtils.print("┐");
         String title = "ACCOUNT MANAGEMENT";
         int padding = (width - title.length()) / 2;
         System.out.print("│"); System.out.print(" ".repeat(padding)); System.out.print(title);
-        System.out.print(" ".repeat(width - padding - title.length())); System.out.println("│");
-        System.out.print("└"); for (int i = 0; i < width; i++) System.out.print("─"); System.out.println("┘");
-        System.out.println("\n1. View All Accounts");
-        System.out.println("2. View Account Details");
-        System.out.println("3. Search Account");
-        System.out.println("4. Back to Main Menu");
-        System.out.println();
+        System.out.print(" ".repeat(width - padding - title.length())); CustomUtils.print("│");
+        System.out.print("└"); for (int i = 0; i < width; i++) System.out.print("─"); CustomUtils.print("┘");
+        CustomUtils.print("\n1. View All Accounts");
+        CustomUtils.print("2. View Account Details");
+        CustomUtils.print("3. Search Account");
+        CustomUtils.print("4. Manage Accounts");
+        CustomUtils.print("5. Back to Main Menu");
+        CustomUtils.print();
     }
 
     public void viewAllAccounts() {
@@ -68,31 +75,31 @@ public class AccountUI {
     }
 
     public void viewAccountDetails() {
-        System.out.println("\n" + "─".repeat(50));
-        System.out.println("VIEW ACCOUNT DETAILS");
-        System.out.println("─".repeat(50));
+        CustomUtils.print("\n" + "─".repeat(50));
+        CustomUtils.print("VIEW ACCOUNT DETAILS");
+        CustomUtils.print("─".repeat(50));
 
         System.out.print("Enter Account Number: ");
         String accountNumber = scanner.nextLine();
 
         Account account = accountManager.findAccount(accountNumber);
         if (account != null) {
-            System.out.println("\n=== ACCOUNT DETAILS ===");
+            CustomUtils.print("\n=== ACCOUNT DETAILS ===");
             account.displayAccountDetails();
         } else {
-            System.out.println("Account not found!");
+            CustomUtils.print("Account not found!");
         }
     }
 
     private void searchAccount() {
-        System.out.println("\n" + "─".repeat(50));
-        System.out.println("SEARCH ACCOUNT");
-        System.out.println("─".repeat(50));
+        CustomUtils.print("\n" + "─".repeat(50));
+        CustomUtils.print("SEARCH ACCOUNT");
+        CustomUtils.print("─".repeat(50));
 
-        System.out.println("Search by:");
-        System.out.println("1. Account Number");
-        System.out.println("2. Customer Name");
-        System.out.println("3. Account Type");
+        CustomUtils.print("Search by:");
+        CustomUtils.print("1. Account Number");
+        CustomUtils.print("2. Customer Name");
+        CustomUtils.print("3. Account Type");
         System.out.print("Select option (1-3): ");
 
         try {
@@ -113,9 +120,9 @@ public class AccountUI {
                     break;
 
                 case 3:
-                    System.out.println("Account Types:");
-                    System.out.println("1. Savings");
-                    System.out.println("2. Checking");
+                    CustomUtils.print("Account Types:");
+                    CustomUtils.print("1. Savings");
+                    CustomUtils.print("2. Checking");
                     System.out.print("Select type (1-2): ");
                     int typeChoice = scanner.nextInt();
                     scanner.nextLine();
@@ -125,11 +132,11 @@ public class AccountUI {
                     break;
 
                 default:
-                    System.out.println("Invalid option!");
+                    CustomUtils.print("Invalid option!");
             }
 
         } catch (Exception e) {
-            System.out.println("Invalid input!");
+            CustomUtils.print("Invalid input!");
             scanner.nextLine();
         }
     }
@@ -139,7 +146,7 @@ public class AccountUI {
         if (account != null) {
             account.displayAccountDetails();
         } else {
-            System.out.println("Account not found!");
+            CustomUtils.print("Account not found!");
         }
     }
 
@@ -147,21 +154,21 @@ public class AccountUI {
         Account[] accounts = accountManager.getAccounts();
         int accountCount = accountManager.getActualAccountCount();
 
-        System.out.println("\nSearch Results for: " + customerName);
-        System.out.println("─".repeat(80));
+        CustomUtils.print("\nSearch Results for: " + customerName);
+        CustomUtils.print("─".repeat(80));
 
         boolean found = false;
         for (int i = 0; i < accountCount; i++) {
             if (accounts[i].getCustomer().getName().toLowerCase()
                     .contains(customerName.toLowerCase())) {
                 accounts[i].displayAccountDetails();
-                System.out.println("─".repeat(40));
+                CustomUtils.print("─".repeat(40));
                 found = true;
             }
         }
 
         if (!found) {
-            System.out.println("No accounts found for customer: " + customerName);
+            CustomUtils.print("No accounts found for customer: " + customerName);
         }
     }
 
@@ -169,8 +176,8 @@ public class AccountUI {
         Account[] accounts = accountManager.getAccounts();
         int accountCount = accountManager.getActualAccountCount();
 
-        System.out.println("\n" + accountType + " Accounts:");
-        System.out.println("─".repeat(80));
+        CustomUtils.print("\n" + accountType + " Accounts:");
+        CustomUtils.print("─".repeat(80));
 
         int count = 0;
         double totalBalance = 0;
@@ -178,18 +185,20 @@ public class AccountUI {
         for (int i = 0; i < accountCount; i++) {
             if (accounts[i].getAccountType().equals(accountType)) {
                 accounts[i].displayAccountDetails();
-                System.out.println("─".repeat(40));
+                CustomUtils.print("─".repeat(40));
                 count++;
                 totalBalance += accounts[i].getBalance();
             }
         }
 
         if (count == 0) {
-            System.out.println("No " + accountType + " accounts found.");
+            CustomUtils.print("No " + accountType + " accounts found.");
         } else {
-            System.out.println("─".repeat(80));
-            System.out.println("Total " + accountType + " Accounts: " + count);
-            System.out.println("Total Balance: $" + String.format("%.2f", totalBalance));
+            CustomUtils.print("─".repeat(80));
+            CustomUtils.print("Total " + accountType + " Accounts: " + count);
+            CustomUtils.print("Total Balance: $" + String.format("%.2f", totalBalance));
         }
     }
+
+
 }
