@@ -26,17 +26,16 @@ public class CheckingAccount extends Account {
     @Override
     public boolean withdraw(double amount) {
         if (amount <= 0) {
-            CustomUtils.print("Withdrawal amount must be positive");
-            return false;
+            throw new IllegalArgumentException("Withdrawal amount must be positive");
         }
 
         double maxWithdrawal = getBalance() + overdraftLimit;
 
         // Check if withdrawal exceeds overdraft limit
         if (amount > maxWithdrawal) {
-            CustomUtils.printf("Withdrawal denied. Exceeds overdraft limit of $%.2f.%n", overdraftLimit);
-            CustomUtils.printf("Current balance: $%.2f, Maximum withdrawal: $%.2f%n", getBalance(), maxWithdrawal);
-            return false;
+            throw new IllegalArgumentException(
+                    String.format("Insufficient funds. Exceeds overdraft limit of $%.2f.", overdraftLimit)
+            );
         }
 
         // If valid, perform withdrawal (can go negative up to overdraft limit)

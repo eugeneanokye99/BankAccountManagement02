@@ -38,17 +38,16 @@ public class SavingsAccount extends Account {
     @Override
     public boolean withdraw(double amount) {
         if (amount <= 0) {
-            CustomUtils.print("Withdrawal amount must be positive");
-            return false;
+            throw new IllegalArgumentException("Withdrawal amount must be positive");
         }
 
         double newBalance = getBalance() - amount;
 
         // Check if withdrawal would violate minimum balance
         if (newBalance < minimumBalance) {
-            System.out.printf("Withdrawal denied. Minimum balance of $%.2f must be maintained.%n", minimumBalance);
-            System.out.printf("Current balance: $%.2f, After withdrawal: $%.2f%n", getBalance(), newBalance);
-            return false;
+            throw new IllegalArgumentException(
+                    String.format("Withdrawal denied. Minimum balance of $%.2f must be maintained.", minimumBalance)
+            );
         }
 
         // If valid, perform withdrawal

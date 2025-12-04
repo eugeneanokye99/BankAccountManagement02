@@ -349,7 +349,7 @@ public class Main {
                 "Please enter Y or N");
 
         if (confirm.equalsIgnoreCase("Y")) {
-            try {  // ADD TRY-CATCH HERE
+            try {
                 boolean success = account.processTransaction(amount, type);
                 if (success) {
                     // Create and record transaction
