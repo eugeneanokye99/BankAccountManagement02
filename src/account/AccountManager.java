@@ -37,10 +37,10 @@ public class AccountManager {
     }
 
     // Display all accounts
-    public void viewAllAccounts() {
+    public boolean viewAllAccounts() {
         if (accountCount == 0) {
             CustomUtils.print("No accounts found.");
-            return;
+            return false;
         }
 
         double totalBalance = 0;
@@ -59,6 +59,8 @@ public class AccountManager {
 
         CustomUtils.print("Total Accounts: " + accountCount);
         CustomUtils.print("Total Bank Balance: $" + String.format("%.2f", totalBalance));
+
+        return true;
     }
 
 
