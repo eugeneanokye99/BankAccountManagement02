@@ -7,7 +7,11 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="BankAccountManagement" />
+        <module name="BankAccountManagementBEM02" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="BankAccountManagement" target="21" />
+    </bytecodeTargetLevel>
   </component>
 </project>
