@@ -9,8 +9,8 @@ public class CheckingAccount extends Account {
 
     public CheckingAccount(Customer customer, double openingBalance) {
         super(customer, openingBalance);
-        this.overdraftLimit = 1000.0; // $1000 overdraft limit as per requirements
-        this.monthlyFee = 10.0; // $10 monthly fee as per requirements
+        this.overdraftLimit = 1000.0;
+        this.monthlyFee = 10.0;
     }
 
     // Getters for Checking-specific properties
